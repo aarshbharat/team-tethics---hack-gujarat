@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+        <link rel="stylessheet" href="style1.css">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+
+    <body>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+
+        <div class="alert alert-primary text-center" role="alert">
+            Mayopia Prediction
+        </div>
+        <div class="container">
+            <div class="card">
+                <div class="card-header text-center">
+                    Fill The Form for Myopia Prediction
+                </div>
+                <div class="card-body">
+                    <form class="form" method="POST" id="myform">
+
+
+
+                        <br>
+                        <div class="form-group">
+                            <label>Age</label>
+                            <select id="age" class="form-control">
+                                <!-- <option value="" disabled selected> Age </option>-->
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="gender" class="form-control">
+                                <option value="0">Male</option>
+                                <option value="1">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="name" class="form-control" id="sphere"
+                                placeholder="Spherical Equivalent Refraction (diopter)">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input type="name" class="form-control" id="lt" placeholder="Lens Thickness (mm)">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="name" class="form-control" id="acd"
+                                    placeholder="Anterior Chamber Depth (mm)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="name" class="form-control" id="sport"
+                                placeholder="Time spent engaging in sports/outdoor activities (hours per week)">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Was the subject’s mother myopic? (No/Yes)</label>
+                            <select id="mommy" class="form-control">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Was the subject’s Father myopic? (No/Yes)</label>
+                            <select id="daddy" class="form-control">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <br>
+                        <button type="button" onclick="getvalue();" class="btn btn-primary btn-lg btn-block">Show
+                            Prediction</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            function getvalue() {
+                let obj = {};
+                var age = document.getElementById("age").value;
+                obj.age = age;
+                //1alert(age);
+                var gender = document.getElementById("gender").value;
+                obj.gender = gender;
+
+                var mommy = document.getElementById("mommy").value;
+                obj.mommy = mommy;
+
+                var sphere = document.getElementById("sphere").value;
+                obj.sphere = sphere;
+                //alert(sphere);
+                var acd = document.getElementById("acd").value;
+                obj.acd = acd;
+                //alert(acd);
+                var lt = document.getElementById("lt").value;
+                obj.lt = lt;
+                //alert(lt);
+                var sport = document.getElementById("sport").value;
+                obj.sport = sport;
+                // alert(sport);
+                var daddy = document.getElementById("daddy").value;
+                obj.daddy = daddy;
+                //alert(daddy);
+                console.log("obj:::::::", obj);
+                postData('http://127.0.0.1:5000/predict', obj)
+                    .then(data => {
+                        alert("The Chances that your child might develop myopia : " + data + "%"); // JSON data parsed by `data.json()` call
+                    });
+            }
+            async function postData(url = '', data = {}) {
+                // Default options are marked with *
+                console.log(data);
+                const response = await fetch(url, {
+                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                    mode: 'cors', // no-cors, *cors, same-origin
+                    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: 'same-origin', // include, *same-origin, omit
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    redirect: 'follow', // manual, *follow, error
+                    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                    body: JSON.stringify(data) // body data type must match "Content-Type" header
+                });
+                console.log(response);
+                return response.json(); // parses JSON response into native JavaScript objects
+
+            }
+
+
+        </script>
+    </body>
+
+</html>
