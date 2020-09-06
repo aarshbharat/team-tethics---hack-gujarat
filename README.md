@@ -1,6 +1,6 @@
 # team-tethics---hack-gujarat
 # Project For Hack Gujarat Hackathon
-This is the project of myopia prediction which can provide you a percentage  
+This is the project of myopia prediction which can provide you a probability in percentage of that.
 
 # You hve to install python libararies like # json # flask # pandas # requests # numpy # pickle # sklearn # numpy # flask_cors
 
